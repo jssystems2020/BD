@@ -8,6 +8,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpClientModule } from '@angular/common/http';
 import { PessoaService } from '../services/pessoa.service';
+import { UsuarioService } from '../services/usuario.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { PessoaService } from '../services/pessoa.service';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    PessoaService
+    PessoaService,
+    UsuarioService
   ]
 })
 export class AppModule {}

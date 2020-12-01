@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
+import { AlertController } from 'ionic-angular';
 import { NavController, IonicPage, MenuController } from 'ionic-angular';
+import { Usuario } from '../../models/usuario.dto';
+import { UsuarioService } from '../../services/usuario.service';
 
 @IonicPage()
 
@@ -8,8 +11,13 @@ import { NavController, IonicPage, MenuController } from 'ionic-angular';
   templateUrl: 'home.html'
 })
 export class HomePage {
+  login:string;
+  senha:string;
 
-  constructor(public navCtrl: NavController, public menu: MenuController) {
+  constructor(public navCtrl: NavController, public menu: MenuController,
+  public alertController: AlertController,
+  public usuarioService: UsuarioService) {
+
   }
 
   ionViewWillEnter() {
@@ -20,8 +28,34 @@ export class HomePage {
     this.menu.swipeEnable(true);
   }
 
-  login(){
-    this.navCtrl.setRoot('AdmPage');
+  logar(){
+    if(this.login != undefined && this.senha != undefined && this.login.length != 0 && this.senha.length != 0){
+      this.presentAlert("Senha e login definidos");
+
+      let usuario:Usuario = {idPessoa:'', login:this.login, senha:this.senha, tipo:''};
+      this.usuarioService.post(usuario).subscribe(
+        (resposta:Usuario)=>{
+          console.log(resposta)
+        },
+        error=>{
+          console.log(error);
+        }
+      )
+      //  this.presentAlert(this.login);
+    //  this.presentAlert(this.senha);
+    //  console.log(this.login);
+  //    console.log(this.senha);
+    }else{// Senha ou login não definido
+      this.presentAlert("Senha e login não definidos");
+    }
   }
 
+  presentAlert(messagem: string){
+    let alert = this.alertController.create({
+      title: 'Aviso',
+      subTitle: messagem,
+      buttons: ['ok']
+    });
+    alert.present();
+  }
 }
